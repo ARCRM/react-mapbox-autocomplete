@@ -10,16 +10,17 @@ class ReactMapboxAutocomplete extends React.Component {
     query: this.props.query ? this.props.query : '',
     queryResults: [],
     publicKey: this.props.publicKey,
+    types: 'address,postcode',
     resetSearch: this.props.resetSearch ? this.props.resetSearch : false
   }
 
   _updateQuery = event => {
     this.setState({ query: event.target.value });
     const header = { 'Content-Type': 'application/json' };
-    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey;
+    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types;
 
     if(this.props.country) {
-      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&country=' + this.props.country;
+      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&country=' + this.props.country;
     }
 
     if(this.state.query.length > 2) {
