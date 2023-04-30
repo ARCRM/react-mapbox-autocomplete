@@ -46,14 +46,15 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       query: _this.props.query ? _this.props.query : '',
       queryResults: [],
       publicKey: _this.props.publicKey,
+      types: 'address,postcode',
       resetSearch: _this.props.resetSearch ? _this.props.resetSearch : false
     }, _this._updateQuery = function (event) {
       _this.setState({ query: event.target.value });
       var header = { 'Content-Type': 'application/json' };
-      var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey;
+      var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types;
 
       if (_this.props.country) {
-        path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&country=' + _this.props.country;
+        path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&country=' + _this.props.country;
       }
 
       if (_this.state.query.length > 2) {
