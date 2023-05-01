@@ -76,8 +76,7 @@ class ReactMapboxAutocomplete extends React.Component {
   render() {
     return (
       <div>
-        <div>
-          <input placeholder={ this.props.placeholder || 'Search' }
+        <input placeholder={ this.props.placeholder || 'Search' }
                  id={this.props.inputId}
                  onClick={this.props.inputOnClick} 
                  onBlur={this.props.inputOnBlur}
@@ -88,8 +87,6 @@ class ReactMapboxAutocomplete extends React.Component {
                  onChange={this._updateQuery}
                  value={this.state.query}
                  type='text'/>
-          </div>
-        <span>
           <div className='react-mapbox-ac-menu'
                style={this.state.queryResults.length > 0 || this.state.error ? { display: 'block' }
                : { display: 'none' }}
@@ -105,9 +102,8 @@ class ReactMapboxAutocomplete extends React.Component {
                        data-lng={place.center[0]}
                        data-lat={place.center[1]}
                        data-text={place.text}>
-
                     {place.place_name}
-
+                    <hr></hr>
                   </div>
                 )
               })
@@ -115,8 +111,7 @@ class ReactMapboxAutocomplete extends React.Component {
 
             {this.state.error && <div className="react-mapbox-ac-suggestion">{this.state.errorMsg}</div>}
           </div>
-        </span>
-      </div>
+        </div>
     );
   }
 }

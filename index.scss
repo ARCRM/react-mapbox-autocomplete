@@ -1,5 +1,5 @@
 .react-mapbox-ac-menu {
-  width: auto;
+  width: inherit;
   position: absolute;
   z-index: 9999;
   background-color: #fff;
@@ -37,7 +37,7 @@ $gray: #9b9b9b;
   border: 0;
   border-bottom: 2px solid $gray;
   outline: 0;
-  font-size: 1.3rem;
+  font-size: 1rem;
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
@@ -45,7 +45,6 @@ $gray: #9b9b9b;
 
 .form__field:focus {
   padding-bottom: 6px;  
-  font-weight: 700;
   border-width: 3px;
   border-image: linear-gradient(to right, $primary,$secondary);
   border-image-slice: 1;
