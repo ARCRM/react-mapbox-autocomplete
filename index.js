@@ -16,7 +16,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _lodash = require('lodash');
 
-require('./index.css');
+require('./index.scss');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107,15 +107,19 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement('input', { placeholder: this.props.placeholder || 'Search',
-          id: this.props.inputId,
-          onClick: this.props.inputOnClick,
-          onBlur: this.props.inputOnBlur,
-          onFocus: this.props.inputOnFocus,
-          className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input' : 'react-mapbox-ac-input',
-          onChange: this._updateQuery,
-          value: this.state.query,
-          type: 'text' }),
+        _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement('input', { placeholder: this.props.placeholder || 'Search',
+            id: this.props.inputId,
+            onClick: this.props.inputOnClick,
+            onBlur: this.props.inputOnBlur,
+            onFocus: this.props.inputOnFocus,
+            className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input form__field' : 'react-mapbox-ac-input form__field',
+            onChange: this._updateQuery,
+            value: this.state.query,
+            type: 'text' })
+        ),
         _react2.default.createElement(
           'span',
           null,

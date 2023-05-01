@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'lodash';
-import './index.css';
+import './index.scss';
 
 class ReactMapboxAutocomplete extends React.Component {
   state = {
@@ -76,17 +76,19 @@ class ReactMapboxAutocomplete extends React.Component {
   render() {
     return (
       <div>
-        <input placeholder={ this.props.placeholder || 'Search' }
-               id={this.props.inputId}
-               onClick={this.props.inputOnClick} 
-               onBlur={this.props.inputOnBlur}
-               onFocus={this.props.inputOnFocus}
-               className={this.props.inputClass ?
-                          this.props.inputClass + ' react-mapbox-ac-input'
-                          : 'react-mapbox-ac-input'}
-               onChange={this._updateQuery}
-               value={this.state.query}
-               type='text'/>
+        <div>
+          <input placeholder={ this.props.placeholder || 'Search' }
+                 id={this.props.inputId}
+                 onClick={this.props.inputOnClick} 
+                 onBlur={this.props.inputOnBlur}
+                 onFocus={this.props.inputOnFocus}
+                 className={this.props.inputClass ?
+                            this.props.inputClass + ' react-mapbox-ac-input form__field'
+                            : 'react-mapbox-ac-input form__field'}
+                 onChange={this._updateQuery}
+                 value={this.state.query}
+                 type='text'/>
+          </div>
         <span>
           <div className='react-mapbox-ac-menu'
                style={this.state.queryResults.length > 0 || this.state.error ? { display: 'block' }
