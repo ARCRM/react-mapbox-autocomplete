@@ -45,6 +45,7 @@
     "lodash-es": "^4",
     "react": "^15",
     "react-dom": "^15",
+    "sass": "^1.62.1",
     "whatwg-fetch": "^2.0.1"
   },
   "devDependencies": {
