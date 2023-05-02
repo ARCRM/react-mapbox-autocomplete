@@ -43,8 +43,8 @@
     "cross-env": "^7.0.3",
     "lodash": "^4",
     "lodash-es": "^4",
-    "react": "^15",
-    "react-dom": "^15",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "sass": "^1.62.1",
     "whatwg-fetch": "^2.0.1"
   },
@@ -56,6 +56,6 @@
     "enzyme": "^2.7.0",
     "enzyme-to-json": "^1.4.5",
     "jest": "^18.1.0",
-    "react-addons-test-utils": "^15.4.2"
+    "react-addons-test-utils": "^15.6.2"
   }
 }
