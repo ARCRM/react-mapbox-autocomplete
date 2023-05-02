@@ -1,143 +1,120 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'lodash';
 import './index.scss';
 
-const ReactMapboxAutocomplete = (props) => {
-
-  const [state, setState] = useState({
+class ReactMapboxAutocomplete extends React.Component {
+  state = {
     error: false,
     errorMsg: '',
-    query: props.query ? props.query : '',
+    query: this.props.query ? this.props.query : '',
     queryResults: [],
-    publicKey: props.publicKey,
+    publicKey: this.props.publicKey,
     types: 'address,postcode',
-    resetSearch: props.resetSearch ? props.resetSearch : false
-  })
+    resetSearch: this.props.resetSearch ? this.props.resetSearch : false
+  }
 
-  const targetRef = useRef(null);
+  _updateQuery = event => {
+    this.setState({ query: event.target.value });
+    const header = { 'Content-Type': 'application/json' };
+    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types;
 
-  // const _updateQuery = (event) => {
-  //   setState(state => ({ ...state, query: event.target.value }));
-  //   const header = { 'Content-Type': 'application/json' };
-  //   let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + state.query + '.json?access_token=' + state.publicKey + '&types=' + state.types;
+    if(this.props.country) {
+      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&country=' + this.props.country;
+    }
 
-  //   if (props.country) {
-  //     path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + state.query + '.json?access_token=' + state.publicKey + '&types=' + state.types + '&country=' + props.country;
-  //   }
+    if(this.state.query.length > 2) {
+      return fetch(path, {
+        headers: header,
+      }).then(res => {
+        if (!res.ok) throw Error(res.statusText);
+        return res.json();
+      }).then(json => {
+        this.setState({
+          error: false,
+          queryResults: json.features
+        });
+      }).catch(err => {
+        this.setState({
+          error: true,
+          errorMsg: 'There was a problem retrieving data from mapbox',
+          queryResults: []
+        });
+      })
+    } else {
+      this.setState({
+        error: false,
+        queryResults: []
+      });
+    }
+  }
 
-  //   if (state.query.length > 2) {
-  //     return fetch(path, {
-  //       headers: header,
-  //     }).then(res => {
-  //       if (!res.ok) throw Error(res.statusText);
-  //       return res.json();
-  //     }).then(json => {
-  //       setState(state => ({
-  //         ...state,
-  //         error: false,
-  //         queryResults: json.features
-  //       }));
-  //     }).catch(err => {
-  //       setState(state => ({
-  //         ...state,
-  //         error: true,
-  //         errorMsg: 'There was a problem retrieving data from mapbox',
-  //         queryResults: []
-  //       }));
-  //     })
-  //   } else {
-  //     setState(state => ({
-  //       ...state,
-  //       error: false,
-  //       queryResults: []
-  //     }));
-  //   }
-  // }
+  _resetSearch = () => {
+    if(this.state.resetSearch) {
+      this.setState({
+        query: '',
+        queryResults: []
+      });
+    } else {
+      this.setState({ queryResults: [] });
+    }
+  }
 
-  // const _resetSearch = () => {
-  //   if (state.resetSearch) {
-  //     setState(state => ({
-  //       ...state,
-  //       query: '',
-  //       queryResults: []
-  //     }));
-  //   } else {
-  //     setState(state => ({ ...state, queryResults: [] }));
-  //   }
-  // }
+  _onSuggestionSelect = event => {
+    if(this.state.resetSearch === false) {
+      this.setState({ query: event.target.getAttribute('data-suggestion') });
+    }
 
-  // const _onSuggestionSelect = (event) => {
-  //   if (state.resetSearch === false) {
-  //     setState(state => ({ ...state, query: event.target.getAttribute('data-suggestion') }));
-  //   }
+    this.props.onSuggestionSelect(
+      event.target.getAttribute('data-suggestion'),
+      event.target.getAttribute('data-lat'),
+      event.target.getAttribute('data-lng'),
+      event.target.getAttribute('data-text')
+    )
+  }
 
-  //   props.onSuggestionSelect(
-  //     event.target.getAttribute('data-suggestion'),
-  //     event.target.getAttribute('data-lat'),
-  //     event.target.getAttribute('data-lng'),
-  //     event.target.getAttribute('data-text')
-  //   )
-  // }
+  render() {
+    return (
+      <div className='container'>
+        <input placeholder={ this.props.placeholder || 'Search' }
+                 id={this.props.inputId}
+                 onClick={this.props.inputOnClick} 
+                 onBlur={this.props.inputOnBlur}
+                 onFocus={this.props.inputOnFocus}
+                 className={this.props.inputClass ?
+                            this.props.inputClass + ' react-mapbox-ac-input form__field'
+                            : 'react-mapbox-ac-input form__field'}
+                 onChange={this._updateQuery}
+                 value={this.state.query}
+                 type='text'/>
+          <div className='react-mapbox-ac-menu'
+               style={this.state.queryResults.length > 0 || this.state.error ? { display: 'block' }
+               : { display: 'none' }}
+               onClick={this._resetSearch}>
 
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     console.log(targetRef.current)
-  //     if (targetRef.current && !targetRef.current.contains(event.target)) {
-  //       setIsReset(true);
-  //     }
-  //   }
+            {
+              map(this.state.queryResults, (place, i) => {
+                return(
+                  <div className='react-mapbox-ac-suggestion'
+                       onClick={this._onSuggestionSelect}
+                       key={i}
+                       data-suggestion={place.place_name}
+                       data-lng={place.center[0]}
+                       data-lat={place.center[1]}
+                       data-text={place.text}>
+                    {place.place_name}
+                    <hr></hr>
+                  </div>
+                )
+              })
+            }
 
-  //   document.addEventListener("click", handleClickOutside, { capture: true });
-
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside, { capture: true });
-  //   };
-  // }, [targetRef]);
-
-
-  return (
-    <div className='container' ref={targetRef}>
-      <input placeholder={props.placeholder || 'Search'}
-        id={props.inputId}
-        onClick={props.inputOnClick}
-        onBlur={props.inputOnBlur}
-        onFocus={props.inputOnFocus}
-        className={props.inputClass ?
-          props.inputClass + ' react-mapbox-ac-input form__field'
-          : 'react-mapbox-ac-input form__field'}
-        // onChange={_updateQuery}
-        value={state.query}
-        type='text' />
-      <div className='react-mapbox-ac-menu'
-        style={state.queryResults.length > 0 || state.error ? { display: 'block' }
-          : { display: 'none' }}
-        // onClick={_resetSearch}>
-        >
-
-        {
-          map(state.queryResults, (place, i) => {
-            return (
-              <div className='react-mapbox-ac-suggestion'
-                // onClick={_onSuggestionSelect}
-                key={i}
-                data-suggestion={place.place_name}
-                data-lng={place.center[0]}
-                data-lat={place.center[1]}
-                data-text={place.text}>
-                {place.place_name}
-                <hr></hr>
-              </div>
-            )
-          })
-        }
-
-        {state.error && <div className="react-mapbox-ac-suggestion">{state.errorMsg}</div>}
-      </div>
-    </div>
-  );
+            {this.state.error && <div className="react-mapbox-ac-suggestion">{this.state.errorMsg}</div>}
+          </div>
+        </div>
+    );
+  }
 }
-
 
 ReactMapboxAutocomplete.defaultProps = {
   inputId: null,
