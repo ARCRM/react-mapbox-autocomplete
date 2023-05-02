@@ -75,7 +75,7 @@ class ReactMapboxAutocomplete extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='container'>
         <input placeholder={ this.props.placeholder || 'Search' }
                  id={this.props.inputId}
                  onClick={this.props.inputOnClick} 

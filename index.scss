@@ -1,10 +1,11 @@
 .react-mapbox-ac-menu {
-  width: inherit;
+  width: 100%;
   position: absolute;
   z-index: 9999;
   background-color: #fff;
   border: 1px solid #ccc;
   margin-top: -1.3rem;
+  border-radius: 5px;
 }
 
 .react-mapbox-ac-input {
@@ -12,13 +13,21 @@
 }
 
 .react-mapbox-ac-suggestion {
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   padding: .5rem 1.5rem;
 }
 
 .react-mapbox-ac-suggestion:hover {
   background-color: #58a;
+}
+
+.container{
+  position: relative;
+}
+
+hr{
+  margin: 5px;
 }
 
 $primary: #11998e;

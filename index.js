@@ -106,46 +106,39 @@ var ReactMapboxAutocomplete = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'container' },
+        _react2.default.createElement('input', { placeholder: this.props.placeholder || 'Search',
+          id: this.props.inputId,
+          onClick: this.props.inputOnClick,
+          onBlur: this.props.inputOnBlur,
+          onFocus: this.props.inputOnFocus,
+          className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input form__field' : 'react-mapbox-ac-input form__field',
+          onChange: this._updateQuery,
+          value: this.state.query,
+          type: 'text' }),
         _react2.default.createElement(
           'div',
-          null,
-          _react2.default.createElement('input', { placeholder: this.props.placeholder || 'Search',
-            id: this.props.inputId,
-            onClick: this.props.inputOnClick,
-            onBlur: this.props.inputOnBlur,
-            onFocus: this.props.inputOnFocus,
-            className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input form__field' : 'react-mapbox-ac-input form__field',
-            onChange: this._updateQuery,
-            value: this.state.query,
-            type: 'text' })
-        ),
-        _react2.default.createElement(
-          'span',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'react-mapbox-ac-menu',
-              style: this.state.queryResults.length > 0 || this.state.error ? { display: 'block' } : { display: 'none' },
-              onClick: this._resetSearch },
-            (0, _lodash.map)(this.state.queryResults, function (place, i) {
-              return _react2.default.createElement(
-                'div',
-                { className: 'react-mapbox-ac-suggestion',
-                  onClick: _this2._onSuggestionSelect,
-                  key: i,
-                  'data-suggestion': place.place_name,
-                  'data-lng': place.center[0],
-                  'data-lat': place.center[1],
-                  'data-text': place.text },
-                place.place_name
-              );
-            }),
-            this.state.error && _react2.default.createElement(
+          { className: 'react-mapbox-ac-menu',
+            style: this.state.queryResults.length > 0 || this.state.error ? { display: 'block' } : { display: 'none' },
+            onClick: this._resetSearch },
+          (0, _lodash.map)(this.state.queryResults, function (place, i) {
+            return _react2.default.createElement(
               'div',
-              { className: 'react-mapbox-ac-suggestion' },
-              this.state.errorMsg
-            )
+              { className: 'react-mapbox-ac-suggestion',
+                onClick: _this2._onSuggestionSelect,
+                key: i,
+                'data-suggestion': place.place_name,
+                'data-lng': place.center[0],
+                'data-lat': place.center[1],
+                'data-text': place.text },
+              place.place_name,
+              _react2.default.createElement('hr', null)
+            );
+          }),
+          this.state.error && _react2.default.createElement(
+            'div',
+            { className: 'react-mapbox-ac-suggestion' },
+            this.state.errorMsg
           )
         )
       );
