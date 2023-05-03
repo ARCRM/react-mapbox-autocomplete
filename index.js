@@ -29,18 +29,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ReactMapboxAutocomplete = function (_React$Component) {
   _inherits(ReactMapboxAutocomplete, _React$Component);
 
-  function ReactMapboxAutocomplete() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
+  function ReactMapboxAutocomplete(props) {
     _classCallCheck(this, ReactMapboxAutocomplete);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    var _this = _possibleConstructorReturn(this, (ReactMapboxAutocomplete.__proto__ || Object.getPrototypeOf(ReactMapboxAutocomplete)).call(this, props));
 
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactMapboxAutocomplete.__proto__ || Object.getPrototypeOf(ReactMapboxAutocomplete)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+    _this.state = {
       error: false,
       errorMsg: '',
       query: _this.props.query ? _this.props.query : '',
@@ -48,7 +42,9 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       publicKey: _this.props.publicKey,
       types: 'address,postcode',
       resetSearch: _this.props.resetSearch ? _this.props.resetSearch : false
-    }, _this._updateQuery = function (event) {
+    };
+
+    _this._updateQuery = function (event) {
       _this.setState({ query: event.target.value });
       var header = { 'Content-Type': 'application/json' };
       var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types;
@@ -81,7 +77,9 @@ var ReactMapboxAutocomplete = function (_React$Component) {
           queryResults: []
         });
       }
-    }, _this._resetSearch = function () {
+    };
+
+    _this._resetSearch = function () {
       if (_this.state.resetSearch) {
         _this.setState({
           query: '',
@@ -90,23 +88,56 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       } else {
         _this.setState({ queryResults: [] });
       }
-    }, _this._onSuggestionSelect = function (event) {
+    };
+
+    _this._onSuggestionSelect = function (event) {
       if (_this.state.resetSearch === false) {
         _this.setState({ query: event.target.getAttribute('data-suggestion') });
       }
 
       _this.props.onSuggestionSelect(event.target.getAttribute('data-suggestion'), event.target.getAttribute('data-lat'), event.target.getAttribute('data-lng'), event.target.getAttribute('data-text'));
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    };
+
+    _this.setWrapperRef = _this.setWrapperRef.bind(_this);
+    _this.handleClickOutside = _this.handleClickOutside.bind(_this);
+    return _this;
   }
 
   _createClass(ReactMapboxAutocomplete, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.addEventListener('click', this.handleClickOutside);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('click', this.handleClickOutside);
+    }
+  }, {
+    key: 'setWrapperRef',
+    value: function setWrapperRef(node) {
+      this.wrapperRef = node;
+    }
+
+    /**
+     * Alert if clicked on outside of element
+     */
+
+  }, {
+    key: 'handleClickOutside',
+    value: function handleClickOutside(event) {
+      if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        this.setState({ queryResults: [] });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
       return _react2.default.createElement(
         'div',
-        { className: 'container' },
+        { className: 'container', ref: this.setWrapperRef },
         _react2.default.createElement('input', { placeholder: this.props.placeholder || 'Search',
           id: this.props.inputId,
           onClick: this.props.inputOnClick,

@@ -4,6 +4,13 @@ import { map } from 'lodash';
 import './index.scss';
 
 class ReactMapboxAutocomplete extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
   state = {
     error: false,
     errorMsg: '',
@@ -73,9 +80,30 @@ class ReactMapboxAutocomplete extends React.Component {
     )
   }
 
+  componentDidMount() {
+    window.addEventListener('click', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  /**
+   * Alert if clicked on outside of element
+   */
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ queryResults: [] });
+    }
+  }
+
   render() {
     return (
-      <div className='container'>
+      <div className='container' ref={this.setWrapperRef}>
         <input placeholder={ this.props.placeholder || 'Search' }
                  id={this.props.inputId}
                  onClick={this.props.inputOnClick} 
