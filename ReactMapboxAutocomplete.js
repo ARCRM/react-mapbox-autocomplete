@@ -26,11 +26,11 @@ class ReactMapboxAutocomplete extends React.Component {
     const header = { 'Content-Type': 'application/json' };
     let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types;
 
-    if(this.props.country) {
+    if (this.props.country) {
       path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&country=' + this.props.country;
     }
 
-    if(this.state.query.length > 2) {
+    if (this.state.query.length > 2) {
       return fetch(path, {
         headers: header,
       }).then(res => {
@@ -57,7 +57,7 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _resetSearch = () => {
-    if(this.state.resetSearch) {
+    if (this.state.resetSearch) {
       this.setState({
         query: '',
         queryResults: []
@@ -68,7 +68,7 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _onSuggestionSelect = event => {
-    if(this.state.resetSearch === false) {
+    if (this.state.resetSearch === false) {
       this.setState({ query: event.target.getAttribute('data-suggestion') });
     }
 
@@ -104,42 +104,47 @@ class ReactMapboxAutocomplete extends React.Component {
   render() {
     return (
       <div className='container' ref={this.setWrapperRef}>
-        <input placeholder={ this.props.placeholder || 'Search' }
-                 id={this.props.inputId}
-                 onClick={this.props.inputOnClick} 
-                 onBlur={this.props.inputOnBlur}
-                 onFocus={this.props.inputOnFocus}
-                 className={this.props.inputClass ?
-                            this.props.inputClass + ' react-mapbox-ac-input form__field'
-                            : 'react-mapbox-ac-input form__field'}
-                 onChange={this._updateQuery}
-                 value={this.state.query}
-                 type='text'/>
-          <div className='react-mapbox-ac-menu'
-               style={this.state.queryResults.length > 0 || this.state.error ? { display: 'block' }
-               : { display: 'none' }}
-               onClick={this._resetSearch}>
+        <input placeholder={this.props.placeholder || 'Search'}
+          id={this.props.inputId}
+          onClick={this.props.inputOnClick}
+          onBlur={this.props.inputOnBlur}
+          onFocus={this.props.inputOnFocus}
+          className={this.props.inputClass ?
+            this.props.inputClass + ' react-mapbox-ac-input form__field'
+            : 'react-mapbox-ac-input form__field'}
+          onChange={this._updateQuery}
+          value={this.state.query}
+          type='text' />
+        {this.state.query.length > 0 && (
+          <button className="react-mapbox-ac-clear-button" onClick={() => this.setState({ query: '' })}>
+            &#x2715;
+          </button>
+        )}
+        <div className='react-mapbox-ac-menu'
+          style={this.state.queryResults.length > 0 || this.state.error ? { display: 'block' }
+            : { display: 'none' }}
+          onClick={this._resetSearch}>
 
-            {
-              map(this.state.queryResults, (place, i) => {
-                return(
-                  <div className='react-mapbox-ac-suggestion'
-                       onClick={this._onSuggestionSelect}
-                       key={i}
-                       data-suggestion={place.place_name}
-                       data-lng={place.center[0]}
-                       data-lat={place.center[1]}
-                       data-text={place.text}>
-                    {place.place_name}
-                    <hr></hr>
-                  </div>
-                )
-              })
-            }
+          {
+            map(this.state.queryResults, (place, i) => {
+              return (
+                <div className='react-mapbox-ac-suggestion'
+                  onClick={this._onSuggestionSelect}
+                  key={i}
+                  data-suggestion={place.place_name}
+                  data-lng={place.center[0]}
+                  data-lat={place.center[1]}
+                  data-text={place.text}>
+                  {place.place_name}
+                  <hr></hr>
+                </div>
+              )
+            })
+          }
 
-            {this.state.error && <div className="react-mapbox-ac-suggestion">{this.state.errorMsg}</div>}
-          </div>
+          {this.state.error && <div className="react-mapbox-ac-suggestion">{this.state.errorMsg}</div>}
         </div>
+      </div>
     );
   }
 }

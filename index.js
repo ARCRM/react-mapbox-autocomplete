@@ -147,6 +147,13 @@ var ReactMapboxAutocomplete = function (_React$Component) {
           onChange: this._updateQuery,
           value: this.state.query,
           type: 'text' }),
+        this.state.query.length > 0 && _react2.default.createElement(
+          'button',
+          { className: 'react-mapbox-ac-clear-button', onClick: function onClick() {
+              return _this2.setState({ query: '' });
+            } },
+          '\u2715'
+        ),
         _react2.default.createElement(
           'div',
           { className: 'react-mapbox-ac-menu',
