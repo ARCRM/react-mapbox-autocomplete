@@ -65,7 +65,7 @@ class ReactMapboxAutocomplete extends React.Component {
     } else {
       this.setState({ queryResults: [] });
     }
-    this.setState({resetSearch: true})
+    this.setState({resetSearch: false})
   }
 
   _onSuggestionSelect = event => {
