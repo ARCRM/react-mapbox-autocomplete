@@ -18,7 +18,7 @@ class ReactMapboxAutocomplete extends React.Component {
     queryResults: [],
     publicKey: this.props.publicKey,
     types: 'address,postcode',
-    resetSearch: this.props.resetSearch
+    resetSearch: false
   }
 
   _updateQuery = event => {
@@ -65,6 +65,7 @@ class ReactMapboxAutocomplete extends React.Component {
     } else {
       this.setState({ queryResults: [] });
     }
+    this.setState({resetSearch: true})
   }
 
   _onSuggestionSelect = event => {
@@ -118,6 +119,7 @@ class ReactMapboxAutocomplete extends React.Component {
         {this.state.query.length > 0 && (
           <button className="react-mapbox-ac-clear-button" onClick={() => {
             this.setState({ query: '', resetSearch: true })
+            this.props.resetSearch(true)
           }}>
             &#x2715;
           </button>
@@ -169,7 +171,7 @@ ReactMapboxAutocomplete.propTypes = {
   onSuggestionSelect: PropTypes.func.isRequired,
   country: PropTypes.string,
   query: PropTypes.string,
-  resetSearch: PropTypes.bool
+  resetSearch: PropTypes.func
 }
 
 export default ReactMapboxAutocomplete;
