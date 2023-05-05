@@ -68,9 +68,9 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _onSuggestionSelect = event => {
-    if (this.state.resetSearch === false) {
+    // if (this.state.resetSearch === false) {
       this.setState({ query: event.target.getAttribute('data-suggestion') });
-    }
+    // }
 
     this.props.onSuggestionSelect(
       event.target.getAttribute('data-suggestion'),
@@ -117,7 +117,7 @@ class ReactMapboxAutocomplete extends React.Component {
           type='text' />
         {this.state.query.length > 0 && (
           <button className="react-mapbox-ac-clear-button" onClick={() => {
-            this.setState({ query: '', resetSearch: true })
+            this.setState({ query: '', queryResults: [],  resetSearch: true })
             this.props.resetSearch(true)
           }}>
             &#x2715;
