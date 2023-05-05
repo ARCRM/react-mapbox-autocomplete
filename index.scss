@@ -62,3 +62,12 @@ $gray: #9b9b9b;
 .form__field{
   &:required,&:invalid { box-shadow:none; }
 }
+
+.react-mapbox-ac-clear-button{
+  position: absolute;
+  top: 5px;
+  right: 35px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
