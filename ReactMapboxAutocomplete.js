@@ -14,11 +14,11 @@ class ReactMapboxAutocomplete extends React.Component {
   state = {
     error: false,
     errorMsg: '',
-    query: this.props.query ? this.props.query : '',
+    query: this.props.query ? this.props.query : this.props.defaultValue,
     queryResults: [],
     publicKey: this.props.publicKey,
     types: 'address,postcode',
-    resetSearch: false
+    resetSearch: false,
   }
 
   _updateQuery = event => {
@@ -161,6 +161,7 @@ ReactMapboxAutocomplete.propTypes = {
   onSuggestionSelect: PropTypes.func.isRequired,
   country: PropTypes.string,
   query: PropTypes.string,
+  defaultValue: PropTypes.string,
   resetSearch: PropTypes.func,
   type: PropTypes.string
 }
