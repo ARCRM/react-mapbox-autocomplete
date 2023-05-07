@@ -19,15 +19,16 @@ class ReactMapboxAutocomplete extends React.Component {
     publicKey: this.props.publicKey,
     types: 'address,postcode,locality,place',
     resetSearch: false,
+    language: this.props.language
   }
 
   _updateQuery = event => {
     this.setState({ query: event.target.value });
     const header = { 'Content-Type': 'application/json' };
-    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types;
+    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language;
 
     if (this.props.country) {
-      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&country=' + this.props.country;
+      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language + '&country=' + this.props.country;
     }
 
     if (this.state.query.length > 2) {
@@ -161,6 +162,7 @@ ReactMapboxAutocomplete.propTypes = {
   onSuggestionSelect: PropTypes.func.isRequired,
   country: PropTypes.string,
   query: PropTypes.string,
+  language: PropTypes.string,
   defaultValue: PropTypes.string,
   resetSearch: PropTypes.func,
   type: PropTypes.string
