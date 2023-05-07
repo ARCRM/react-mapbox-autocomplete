@@ -17,7 +17,7 @@ class ReactMapboxAutocomplete extends React.Component {
     query: this.props.query ? this.props.query : this.props.defaultValue,
     queryResults: [],
     publicKey: this.props.publicKey,
-    types: 'address,postcode',
+    types: 'address,postcode,locality,places',
     resetSearch: false,
   }
 
