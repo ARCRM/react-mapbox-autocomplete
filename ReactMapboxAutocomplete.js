@@ -105,6 +105,7 @@ class ReactMapboxAutocomplete extends React.Component {
             this.props.inputClass + ' react-mapbox-ac-input form__field'
             : 'react-mapbox-ac-input form__field'}
           onChange={this._updateQuery}
+          onPaste={this._updateQuery}
           value={this.state.query}
           type='text' />
         {this.state.query.length > 0 && (
