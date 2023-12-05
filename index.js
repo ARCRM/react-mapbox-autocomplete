@@ -37,20 +37,21 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     _this.state = {
       error: false,
       errorMsg: '',
-      query: _this.props.query ? _this.props.query : '',
+      query: _this.props.query ? _this.props.query : _this.props.defaultValue,
       queryResults: [],
       publicKey: _this.props.publicKey,
-      types: 'address,postcode',
-      resetSearch: _this.props.resetSearch ? _this.props.resetSearch : false
+      types: 'address,postcode,locality,place',
+      resetSearch: false,
+      language: _this.props.language
     };
 
     _this._updateQuery = function (event) {
       _this.setState({ query: event.target.value });
       var header = { 'Content-Type': 'application/json' };
-      var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types;
+      var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language;
 
       if (_this.props.country) {
-        path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&country=' + _this.props.country;
+        path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language + '&country=' + _this.props.country;
       }
 
       if (_this.state.query.length > 2) {
@@ -80,20 +81,11 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     };
 
     _this._resetSearch = function () {
-      if (_this.state.resetSearch) {
-        _this.setState({
-          query: '',
-          queryResults: []
-        });
-      } else {
-        _this.setState({ queryResults: [] });
-      }
+      _this.setState({ queryResults: [] });
     };
 
     _this._onSuggestionSelect = function (event) {
-      if (_this.state.resetSearch === false) {
-        _this.setState({ query: event.target.getAttribute('data-suggestion') });
-      }
+      _this.setState({ query: event.target.getAttribute('data-suggestion') });
 
       _this.props.onSuggestionSelect(event.target.getAttribute('data-suggestion'), event.target.getAttribute('data-lat'), event.target.getAttribute('data-lng'), event.target.getAttribute('data-text'));
     };
@@ -145,12 +137,14 @@ var ReactMapboxAutocomplete = function (_React$Component) {
           onFocus: this.props.inputOnFocus,
           className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input form__field' : 'react-mapbox-ac-input form__field',
           onChange: this._updateQuery,
+          onPaste: this._updateQuery,
           value: this.state.query,
           type: 'text' }),
         this.state.query.length > 0 && _react2.default.createElement(
           'button',
           { className: 'react-mapbox-ac-clear-button', onClick: function onClick() {
-              return _this2.setState({ query: '' });
+              _this2.setState({ query: '', queryResults: [], resetSearch: true });
+              _this2.props.resetSearch({ state: true, type: _this2.props.type });
             } },
           '\u2715'
         ),
@@ -204,7 +198,10 @@ ReactMapboxAutocomplete.propTypes = {
   onSuggestionSelect: _propTypes2.default.func.isRequired,
   country: _propTypes2.default.string,
   query: _propTypes2.default.string,
-  resetSearch: _propTypes2.default.bool
+  language: _propTypes2.default.string,
+  defaultValue: _propTypes2.default.string,
+  resetSearch: _propTypes2.default.func,
+  type: _propTypes2.default.string
 };
 
 exports.default = ReactMapboxAutocomplete;
