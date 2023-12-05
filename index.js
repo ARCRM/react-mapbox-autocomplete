@@ -46,6 +46,7 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     };
 
     _this._updateQuery = function (event) {
+      console.log('test');
       _this.setState({ query: event.target.value });
       var header = { 'Content-Type': 'application/json' };
       var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language;

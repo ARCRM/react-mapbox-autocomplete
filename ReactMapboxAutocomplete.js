@@ -23,6 +23,7 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _updateQuery = event => {
+    console.log('test')
     this.setState({ query: event.target.value });
     const header = { 'Content-Type': 'application/json' };
     let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language;
