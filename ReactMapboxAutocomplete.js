@@ -22,9 +22,17 @@ class ReactMapboxAutocomplete extends React.Component {
     language: this.props.language
   }
 
-  _updateQuery = event => {
-    console.log('test')
+  _updateQueryOnChange = event => {
     this.setState({ query: event.target.value });
+    this.__triggerSearch();
+  }
+
+  _updateQueryOnPaste = event => {
+    this.setState({ query: event.clipboardData.getData('text') });
+    this.__triggerSearch();
+  }
+
+  _triggerSearch = () => {
     const header = { 'Content-Type': 'application/json' };
     let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language;
 
@@ -105,8 +113,8 @@ class ReactMapboxAutocomplete extends React.Component {
           className={this.props.inputClass ?
             this.props.inputClass + ' react-mapbox-ac-input form__field'
             : 'react-mapbox-ac-input form__field'}
-          onChange={this._updateQuery}
-          onPaste={this._updateQuery}
+          onChange={this._updateQueryOnChange}
+          onPaste={this._updateQueryOnPaste}
           value={this.state.query}
           type='text' />
         {this.state.query.length > 0 && (

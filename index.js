@@ -45,9 +45,17 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       language: _this.props.language
     };
 
-    _this._updateQuery = function (event) {
-      console.log('test');
+    _this._updateQueryOnChange = function (event) {
       _this.setState({ query: event.target.value });
+      _this.__triggerSearch();
+    };
+
+    _this._updateQueryOnPaste = function (event) {
+      _this.setState({ query: event.clipboardData.getData('text') });
+      _this.__triggerSearch();
+    };
+
+    _this._triggerSearch = function () {
       var header = { 'Content-Type': 'application/json' };
       var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language;
 
@@ -137,8 +145,8 @@ var ReactMapboxAutocomplete = function (_React$Component) {
           onBlur: this.props.inputOnBlur,
           onFocus: this.props.inputOnFocus,
           className: this.props.inputClass ? this.props.inputClass + ' react-mapbox-ac-input form__field' : 'react-mapbox-ac-input form__field',
-          onChange: this._updateQuery,
-          onPaste: this._updateQuery,
+          onChange: this._updateQueryOnChange,
+          onPaste: this._updateQueryOnPaste,
           value: this.state.query,
           type: 'text' }),
         this.state.query.length > 0 && _react2.default.createElement(
