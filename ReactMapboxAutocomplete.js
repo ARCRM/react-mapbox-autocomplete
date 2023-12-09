@@ -24,7 +24,7 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _updateQueryOnChange = event => {
-    if(!paste){
+    if(!this.state.paste){
       this.setState({ query: event.target.value });
       this._triggerSearch();
     }else{
