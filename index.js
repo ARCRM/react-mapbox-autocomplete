@@ -51,8 +51,9 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     };
 
     _this._updateQueryOnPaste = function (event) {
+      event.preventDefault();
       _this.setState({ query: event.clipboardData.getData('text') });
-      // this._triggerSearch();
+      _this._triggerSearch();
     };
 
     _this._triggerSearch = function () {
