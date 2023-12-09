@@ -19,16 +19,21 @@ class ReactMapboxAutocomplete extends React.Component {
     publicKey: this.props.publicKey,
     types: 'address,postcode,locality,place',
     resetSearch: false,
-    language: this.props.language
+    language: this.props.language,
+    paste: false
   }
 
   _updateQueryOnChange = event => {
-    this.setState({ query: event.target.value });
-    this._triggerSearch();
+    if(!paste){
+      this.setState({ query: event.target.value });
+      this._triggerSearch();
+    }else{
+      this.setState({ paste: false });
+    }
   }
 
   _updateQueryOnPaste = event => {
-    this.setState({ query: event.clipboardData.getData('text') });
+    this.setState({ query: event.clipboardData.getData('text'), paste: true });
     this._triggerSearch();
   }
 

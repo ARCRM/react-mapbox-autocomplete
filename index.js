@@ -42,16 +42,21 @@ var ReactMapboxAutocomplete = function (_React$Component) {
       publicKey: _this.props.publicKey,
       types: 'address,postcode,locality,place',
       resetSearch: false,
-      language: _this.props.language
+      language: _this.props.language,
+      paste: false
     };
 
     _this._updateQueryOnChange = function (event) {
-      _this.setState({ query: event.target.value });
-      _this._triggerSearch();
+      if (!paste) {
+        _this.setState({ query: event.target.value });
+        _this._triggerSearch();
+      } else {
+        _this.setState({ paste: false });
+      }
     };
 
     _this._updateQueryOnPaste = function (event) {
-      _this.setState({ query: event.clipboardData.getData('text') });
+      _this.setState({ query: event.clipboardData.getData('text'), paste: true });
       _this._triggerSearch();
     };
 
