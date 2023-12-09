@@ -56,6 +56,7 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     };
 
     _this._updateQueryOnPaste = function (event) {
+      console.log('onPaste', event.clipboardData.getData('text'));
       _this.setState({ query: event.clipboardData.getData('text'), paste: true });
       _this._triggerSearch();
     };
@@ -68,6 +69,8 @@ var ReactMapboxAutocomplete = function (_React$Component) {
         path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + _this.state.query + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language + '&country=' + _this.props.country;
       }
 
+      console.log(_this.state.query, _this.state.query.length);
+
       if (_this.state.query.length > 2) {
         return fetch(path, {
           headers: header
@@ -79,6 +82,7 @@ var ReactMapboxAutocomplete = function (_React$Component) {
             error: false,
             queryResults: json.features
           });
+          console.log(json.features);
         }).catch(function (err) {
           _this.setState({
             error: true,

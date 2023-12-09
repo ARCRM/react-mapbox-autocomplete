@@ -33,6 +33,7 @@ class ReactMapboxAutocomplete extends React.Component {
   }
 
   _updateQueryOnPaste = event => {
+    console.log('onPaste', event.clipboardData.getData('text'));
     this.setState({ query: event.clipboardData.getData('text'), paste: true });
     this._triggerSearch();
   }
@@ -45,6 +46,8 @@ class ReactMapboxAutocomplete extends React.Component {
       path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + this.state.query + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language + '&country=' + this.props.country;
     }
 
+    console.log(this.state.query, this.state.query.length);
+
     if (this.state.query.length > 2) {
       return fetch(path, {
         headers: header,
@@ -56,6 +59,7 @@ class ReactMapboxAutocomplete extends React.Component {
           error: false,
           queryResults: json.features
         });
+        console.log(json.features);
       }).catch(err => {
         this.setState({
           error: true,
