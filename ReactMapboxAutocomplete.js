@@ -24,12 +24,12 @@ class ReactMapboxAutocomplete extends React.Component {
 
   _updateQueryOnChange = event => {
     this.setState({ query: event.target.value });
-    this.__triggerSearch();
+    this._triggerSearch();
   }
 
   _updateQueryOnPaste = event => {
     this.setState({ query: event.clipboardData.getData('text') });
-    this.__triggerSearch();
+    this._triggerSearch();
   }
 
   _triggerSearch = () => {
