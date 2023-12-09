@@ -46,14 +46,11 @@ var ReactMapboxAutocomplete = function (_React$Component) {
     };
 
     _this._updateQueryOnChange = function (event) {
-      console.log('test onchange');
       _this.setState({ query: event.target.value });
       _this._triggerSearch();
     };
 
     _this._updateQueryOnPaste = function (event) {
-      console.log('test onpaste');
-      _this.setState({ query: event.clipboardData.getData('text') });
       _this._triggerSearch();
     };
 
