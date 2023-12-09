@@ -34,8 +34,46 @@ class ReactMapboxAutocomplete extends React.Component {
 
   _updateQueryOnPaste = event => {
     console.log('onPaste', event.clipboardData.getData('text'));
-    this.setState({ query: event.clipboardData.getData('text'), paste: true });
-    this._triggerSearch();
+    const text = event.clipboardData.getData('text');
+    this.setState({ query: text, paste: true });
+    this._triggerSearchPaste(text);
+  }
+
+  _triggerSearchPaste = (text) => {
+    const header = { 'Content-Type': 'application/json' };
+    let path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + text + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language;
+
+    if (this.props.country) {
+      path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + text + '.json?access_token=' + this.state.publicKey + '&types=' + this.state.types + '&language=' + this.state.language + '&country=' + this.props.country;
+    }
+
+    console.log(text, text.length);
+
+    if (text.length > 2) {
+      return fetch(path, {
+        headers: header,
+      }).then(res => {
+        if (!res.ok) throw Error(res.statusText);
+        return res.json();
+      }).then(json => {
+        this.setState({
+          error: false,
+          queryResults: json.features
+        });
+        console.log(json.features);
+      }).catch(err => {
+        this.setState({
+          error: true,
+          errorMsg: 'There was a problem retrieving data from mapbox',
+          queryResults: []
+        });
+      })
+    } else {
+      this.setState({
+        error: false,
+        queryResults: []
+      });
+    }
   }
 
   _triggerSearch = () => {

@@ -57,8 +57,46 @@ var ReactMapboxAutocomplete = function (_React$Component) {
 
     _this._updateQueryOnPaste = function (event) {
       console.log('onPaste', event.clipboardData.getData('text'));
-      _this.setState({ query: event.clipboardData.getData('text'), paste: true });
-      _this._triggerSearch();
+      var text = event.clipboardData.getData('text');
+      _this.setState({ query: text, paste: true });
+      _this._triggerSearchPaste(text);
+    };
+
+    _this._triggerSearchPaste = function (text) {
+      var header = { 'Content-Type': 'application/json' };
+      var path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + text + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language;
+
+      if (_this.props.country) {
+        path = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + text + '.json?access_token=' + _this.state.publicKey + '&types=' + _this.state.types + '&language=' + _this.state.language + '&country=' + _this.props.country;
+      }
+
+      console.log(text, text.length);
+
+      if (text.length > 2) {
+        return fetch(path, {
+          headers: header
+        }).then(function (res) {
+          if (!res.ok) throw Error(res.statusText);
+          return res.json();
+        }).then(function (json) {
+          _this.setState({
+            error: false,
+            queryResults: json.features
+          });
+          console.log(json.features);
+        }).catch(function (err) {
+          _this.setState({
+            error: true,
+            errorMsg: 'There was a problem retrieving data from mapbox',
+            queryResults: []
+          });
+        });
+      } else {
+        _this.setState({
+          error: false,
+          queryResults: []
+        });
+      }
     };
 
     _this._triggerSearch = function () {
